@@ -1,4 +1,4 @@
-## SilvaBuilda: The Silverstripe Build Tool ##
+## SilvaBuilda: The Silverstripe Build Tool
 
 Silvabuilda is intended to be a simple tool that will alow you to manage your
 silverstripe project modules without having to commit them all to your project

@@ -45,7 +45,7 @@ class AbstractArchive:
         path -- location that archive will be extracting to
         
         """
-        print "Method not implemented"
+        raise NotImplementedError
         
     def _open_archive(self):
         """
@@ -56,7 +56,7 @@ class AbstractArchive:
                    EG: zipfile.ZipFile(self._archive_path)
         
         """
-        print "Method not implemented"
+        raise NotImplementedError
         
         
     def _get_contents(self):
@@ -67,7 +67,7 @@ class AbstractArchive:
         __return__ list of file paths from within the archive
         
         """
-        print "Method not implemented"
+        raise NotImplementedError
         
     def _extract_file(self,ar_file,out_file):
         """
