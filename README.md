@@ -84,7 +84,7 @@ local contains the following children:
 * parent (the parent directory of the config file)
 * grandparent (the parent of the parent of config file)
 
-### remotes
+#### remotes
 
 The remotes node is where you add your remote modules. Each module is added as
 a child node. These children are:
