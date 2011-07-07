@@ -1,16 +1,19 @@
-## build.py deals with the main execution of SilvaBuilda. Use it as follows:
-## 
-## python build.py [options] <path/to/config> <path/to/project>
-## 
-## options
-## --local only copies the local working copy, does not putt down remotes (good
-##         for updating your local project if your working copy is located
-##         seperatly)
+# build.py deals with the main execution of SilvaBuilda. Use it as follows:
+# 
+# python build.py [options] <path/to/config> <path/to/project>
+# 
+# options
+# --local only copies the local working copy, does not putt down remotes (good
+#         for updating your local project if your working copy is located
+#         seperatly)
 
 __author__="morven"
 __date__ ="$07-Jul-2011 23:01:15$"
 
-import os, urllib, sys, shutil
+import os
+import urllib
+import sys
+import shutil
 from xml.dom.minidom    import parse
 from compressions.zip   import ZipArchive
 from compressions.tar   import TarArchive
