@@ -59,11 +59,13 @@ identify all your remote modules as zip files or tarballs.
 The XML config will need the following layout (an example config is also
 included with the download of SilvaBuilda)
 
-builda
---local
-----workingcopy[location]
---remotes
-----remote[name,url,type]
+* builda
+* --local
+* ----workingcopy[location]
+* ----ignores
+* ------ignore[name]
+* --remotes
+* ----remote[name,url,type]
 
 #### builda
 
@@ -83,6 +85,14 @@ local contains the following children:
 * current (the same directory as the config file)
 * parent (the parent directory of the config file)
 * grandparent (the parent of the parent of config file)
+
+*ignores*: here you can list any names of files folders you want to be ignored.
+At the moment it is not very cleaver and only checks the against file/folder
+name, no advanced pattern matching as of yet.
+
+You can add a new ignore by adding an ignore child and then setting the "name"
+attribute to the file/folder name you wish to ignore (*NOTE* currently this is
+matched recursivly) 
 
 #### remotes
 
