@@ -77,6 +77,15 @@ To use this option, you only need to add one argument:
 copy and must have the <workingcopy/> element set (explained in configuration
 below)
  
+## Switches
+
+You can also use the "-l" switch to set SilvaBuila to build only using your
+local working copy.
+
+Why would you want to do this? Well, if your working copy is located seperatly
+to your project directory and you make code changes that you want to preview,
+runnin with this flag will only copy your local files and not pull down remote
+modules 
 
 ## Configuration
 
