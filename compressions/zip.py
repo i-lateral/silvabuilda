@@ -6,9 +6,9 @@ class ZipArchive(AbstractArchive):
         self._output_path = path
     
         for name in self._opened_archive.namelist():
-            output = name.replace(name.split('/')[0], self._output_path, 1)
+            output = name.replace(name.split(os.sep)[0], self._output_path, 1)
 
-            if output.endswith('/'):
+            if output.endswith(os.sep):
                 self._makedir(output)
                         
             else:

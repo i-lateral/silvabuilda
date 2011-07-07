@@ -6,7 +6,7 @@ class TarArchive(AbstractArchive):
         self._output_path = path
     
         for member in self._opened_archive.getmembers():
-            output = member.name.replace(member.name.split('/')[0], self._output_path, 1)
+            output = member.name.replace(member.name.split(os.sep)[0], self._output_path, 1)
 
             if member.isdir():
                 self._makedir(output)
