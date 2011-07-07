@@ -11,17 +11,23 @@
 ##
 ###############################################################################
 
-import os, urllib, sys
+import os, urllib, sys, shutil
 from xml.dom.minidom    import parse
 from compressions.zip   import ZipArchive
 from compressions.tar   import TarArchive
 
 # Ensure paths are set correctly
 try:
-    config_path, project_path = sys.argv[1:]
+    if len(sys.argv[1:]) == 2:
+        config_path, project_path = sys.argv[1:]
+    elif len(sys.argv[1:]) == 1:
+        config_path = sys.argv[1:2][0]
+        project_path = None
 except ValueError:
-    print 'build.py requires paths to config and project'
+    print 'build.py requires at least a config path'
     sys.exit()
+
+print config_path
 
 # Load config XML file
 config = parse(config_path)
@@ -38,6 +44,10 @@ elif wc_location == 'grandparent':
     path_mod = ".." + os.sep + ".." + os.sep
     
 wc_path = os.path.abspath(wc_path + path_mod) + os.sep
+
+if not project_path:
+    project_path = wc_path
+    
 if not project_path.endswith(os.sep):
     project_path += os.sep
     
@@ -66,6 +76,11 @@ for item in remotes:
     download_file = project_path + filename
     extract_path = project_path + item['name']
         
+    # Check if remote has been downloaded before, if so, remove it
+    if os.path.isdir(extract_path):
+        shutil.rmtree(extract_path)
+        print "Removed module: " + item['name']
+    
     print 'Downloading: ' + filename
     remote = urllib.urlopen(item['url'])
     local = open(download_file, 'w')
@@ -93,43 +108,44 @@ for item in remotes:
     os.remove(download_file)
     print "Removed: " + filename
     
-# Loop through all files and directories in working copy them to project dir
-for root, dirs, files in os.walk(wc_path):
-    # loop through all ignores and remove any files or dirs that match
-    for ignore in ignores:
-        if ignore in dirs:
-            dirs.remove(ignore)
-        if ignore in files:
-            files.remove(ignore)
-
-
-    # Create all required directories
-    for d in dirs:
-        if not root.endswith(os.sep):
-            root = root + os.sep
-        
-        dest = root + d
-        dest = project_path + dest.replace(wc_path,'')
-        
-        if not os.path.isdir(dest):
-            os.mkdir(dest)
-            print 'Directory created at: ' + dest
+if not wc_path == project_path:
+    # Loop through all files and directories in working copy them to project dir
+    for root, dirs, files in os.walk(wc_path):
+        # loop through all ignores and remove any files or dirs that match
+        for ignore in ignores:
+            if ignore in dirs:
+                dirs.remove(ignore)
+            if ignore in files:
+                files.remove(ignore)
     
-
-    #loop through all files in the directory
-    for f in files:
-        if not root.endswith(os.sep):
-            root = root + os.sep
-        
-        old = root + f
-        new = project_path + old.replace(wc_path,'')
-        
-        try:
-            new_file = open(new,'w')
-            new_file.write(open(old,'r').read())
-            new_file.flush()
-            new_file.close()
-            print 'File ' + f + ' copied.'
-        except IOError:
-            print "Error writing file: " + f
+    
+        # Create all required directories
+        for d in dirs:
+            if not root.endswith(os.sep):
+                root = root + os.sep
             
+            dest = root + d
+            dest = project_path + dest.replace(wc_path,'')
+            
+            if not os.path.isdir(dest):
+                os.mkdir(dest)
+                print 'Directory created at: ' + dest
+        
+    
+        #loop through all files in the directory
+        for f in files:
+            if not root.endswith(os.sep):
+                root = root + os.sep
+            
+            old = root + f
+            new = project_path + old.replace(wc_path,'')
+            
+            try:
+                new_file = open(new,'w')
+                new_file.write(open(old,'r').read())
+                new_file.flush()
+                new_file.close()
+                print 'File ' + f + ' copied.'
+            except IOError:
+                print "Error writing file: " + f
+                
