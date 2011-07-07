@@ -43,6 +43,41 @@ As long as python is installed, all you need to do is the following:
 2. CD to that folder from your command line
 3. Run python build.py [options] </path/to/config> </path/to/project/folder/>
 
+## Usage
+
+SilvaBuilda can be used in 2 ways. You can use it to either:
+
+### Combine local and remote in a seperate location
+
+Combine a local working copy with a pre defined set of remote modules into a
+seperate project directory (say inside a web root).
+
+To do this you just need to run build.py with two arguments:
+
+1. The location of your config file
+2. The location of your project directory
+
+*example:*
+    python build.py /path/to/config/file /path/to/ptoject/directory/
+
+### Pull remote files into your working copy
+
+Pull down remote files into your working copy. This can be usefull to automate
+adding common modules to your repo, or combined with something like .gitignore,
+would allow you to use external modules without adding them to your repo.
+
+To use this option, you only need to add one argument:
+
+1. The location of your config file
+
+*example:*
+    python build.py /path/to/config/file
+    
+*NOTE*: In both instances above, the config file MUST be inside your working
+copy and must have the <workingcopy/> element set (explained in configuration
+below)
+ 
+
 ## Configuration
 
 The idea behind SilvaBuilda is to create a tool that allows you to keep your
