@@ -36,8 +36,6 @@ except ValueError:
     print 'build.py requires at least a config path'
     sys.exit()
 
-print config_path
-
 # Load config XML file
 config = parse(config_path)
 
@@ -138,6 +136,10 @@ if not wc_path == project_path:
             dest = root + d
             dest = project_path + dest.replace(wc_path,'')
             
+            if os.path.isdir(dest):
+                shutil.rmtree(dest)
+                print 'Directory removed: ' + dest
+            
             if not os.path.isdir(dest):
                 os.mkdir(dest)
                 print 'Directory created at: ' + dest
@@ -159,4 +161,3 @@ if not wc_path == project_path:
                 print 'File ' + f + ' copied.'
             except IOError:
                 print "Error writing file: " + f
-                
