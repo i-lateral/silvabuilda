@@ -11,11 +11,11 @@ __author__="morven"
 __date__ ="$07-Jul-2011 23:01:15$"
 
 import os
-import shutil
 import sys
 
 from xml.dom.minidom import parse
 from filesystem.remotes import RemoteManager
+from filesystem.locals import LocalManager
 
 # Ensure paths are set correctly
 args = sys.argv[1:]
@@ -65,8 +65,7 @@ if not os.path.exists(project_path):
 
 if not local_only:
     # Generate a list of dicts to store the XML remotes data
-    remotes = []
-        
+    remotes = []  
     for remote in config.getElementsByTagName('remote'):
         remotes.append({
             'name': remote.getAttribute('name'),
@@ -75,56 +74,14 @@ if not local_only:
         })
     
     RemoteManager(remotes,project_path)
-    
-    print "Completed downloading remote modules"
-    
  
 if not wc_path == project_path:
     # Generate a list of ignores from the config file
     ignores = []
     for ignore in config.getElementsByTagName('ignore'):
         ignores.append(ignore.getAttribute('name'))
-
-    # Loop through all files and directories in working copy them to project dir
-    for root, dirs, files in os.walk(wc_path):
-        # loop through all ignores and remove any files or dirs that match
-        for ignore in ignores:
-            if ignore in dirs:
-                dirs.remove(ignore)
-            if ignore in files:
-                files.remove(ignore)
-    
-    
-        # Create all required directories
-        for d in dirs:
-            if not root.endswith(os.sep):
-                root = root + os.sep
-            
-            dest = root + d
-            dest = project_path + dest.replace(wc_path,'')
-            
-            if os.path.isdir(dest):
-                shutil.rmtree(dest)
-                print 'Directory removed: ' + dest
-            
-            if not os.path.isdir(dest):
-                os.mkdir(dest)
-                print 'Directory created at: ' + dest
         
-    
-        #loop through all files in the directory
-        for f in files:
-            if not root.endswith(os.sep):
-                root = root + os.sep
-            
-            old = root + f
-            new = project_path + old.replace(wc_path,'')
-            
-            try:
-                new_file = open(new,'w')
-                new_file.write(open(old,'r').read())
-                new_file.flush()
-                new_file.close()
-                print 'File ' + f + ' copied.'
-            except IOError:
-                print "Error writing file: " + f
+    locals = LocalManager(wc_path)
+    locals.set_ignores(ignores)
+    locals.set_out_path(project_path)
+    locals.execute()

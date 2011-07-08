@@ -2,9 +2,9 @@ __author__="morven"
 __date__ ="$07-Jul-2011 23:39:04$"
 
 import os
-import shutil
 import urllib
 
+from filesystem import rm_existing,fix_path
 from compressions.tar import TarArchive
 from compressions.zip import ZipArchive
 
@@ -22,6 +22,8 @@ class RemoteManager:
         self._base_path = download_path
         self._remotes = remotes
         self._loop_remotes()
+        
+        print "Completed downloading remote modules"
     
     
     def _loop_remotes(self):
@@ -33,7 +35,7 @@ class RemoteManager:
             download_path = self._base_path + filename
             extract_path = self._base_path + item['name']
             
-            if self._existing_dir(extract_path):
+            if rm_existing(extract_path):
                 print "Directory deleted: " + extract_path
                 
             print "Attempting to download: " + filename
@@ -49,19 +51,6 @@ class RemoteManager:
             print "Removed: " + filename
             
         return True
-        
-    
-    def _existing_dir(self, loc):
-        """
-        Used to check if a location already exists, if it does, delete it and
-        return true
-        
-        """
-        if os.path.isdir(loc):
-            shutil.rmtree(loc)
-            return True
-        else:
-            return False
         
     
     def _download(self,url,path):
