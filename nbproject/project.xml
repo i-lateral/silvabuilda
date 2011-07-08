@@ -5,7 +5,7 @@
         <data xmlns="http://nbpython.dev.java.net/ns/php-project/1">
             <name>SilvaBuilda</name>
             <sources>
-                <root id="src.dir"/>
+                <root id="src.silvabuilda.dir"/>
             </sources>
             <tests/>
         </data>

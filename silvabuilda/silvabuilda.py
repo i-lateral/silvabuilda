@@ -11,12 +11,11 @@ __author__="morven"
 __date__ ="$07-Jul-2011 23:01:15$"
 
 import os
-import urllib
-import sys
 import shutil
-from xml.dom.minidom    import parse
-from compressions.zip   import ZipArchive
-from compressions.tar   import TarArchive
+import sys
+
+from xml.dom.minidom import parse
+from filesystem.remotes import RemoteManager
 
 # Ensure paths are set correctly
 args = sys.argv[1:]
@@ -64,16 +63,10 @@ if not os.path.exists(project_path):
     os.makedirs(project_path)
     print "Directory Created: " + project_path
 
-# Generate a list of ignores from the config file
-ignores = []
-for ignore in config.getElementsByTagName('ignore'):
-    ignores.append(ignore.getAttribute('name'))
-
-
 if not local_only:
     # Generate a list of dicts to store the XML remotes data
     remotes = []
-    
+        
     for remote in config.getElementsByTagName('remote'):
         remotes.append({
             'name': remote.getAttribute('name'),
@@ -81,45 +74,17 @@ if not local_only:
             'type': remote.getAttribute('type')
         })
     
-    # Loop through each remote, download, extract then delete it
-    for item in remotes:
-        filename = item['name'] + '.' + item['type']
-        download_file = project_path + filename
-        extract_path = project_path + item['name']
-            
-        # Check if remote has been downloaded before, if so, remove it
-        if os.path.isdir(extract_path):
-            shutil.rmtree(extract_path)
-            print "Removed module: " + item['name']
-        
-        print 'Downloading: ' + filename
-        remote = urllib.urlopen(item['url'])
-        local = open(download_file, 'w')
-        local.write(remote.read())
-                
-        print 'Downloaded: ' + filename
-        remote.close()
-        local.close()
-              
-        if item['type'] == "zip":
-            archive = ZipArchive(download_file)
-              
-        elif item['type'] == "tar":
-            archive = TarArchive(download_file)
-              
-        elif item['type'] == "tar.gz":
-            archive = TarArchive(download_file,'gz')
-              
-        elif item['type'] == "tar.bz2":
-            archive = TarArchive(download_file,'bz2')
-            
-        if archive:
-            archive.extract(extract_path)
-                    
-        os.remove(download_file)
-        print "Removed: " + filename
+    RemoteManager(remotes,project_path)
     
+    print "Completed downloading remote modules"
+    
+ 
 if not wc_path == project_path:
+    # Generate a list of ignores from the config file
+    ignores = []
+    for ignore in config.getElementsByTagName('ignore'):
+        ignores.append(ignore.getAttribute('name'))
+
     # Loop through all files and directories in working copy them to project dir
     for root, dirs, files in os.walk(wc_path):
         # loop through all ignores and remove any files or dirs that match
