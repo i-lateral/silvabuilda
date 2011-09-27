@@ -14,8 +14,8 @@ import os
 import sys
 
 from xml.dom.minidom import parse
-from filesystem.remotes import RemoteManager
-from filesystem.locals import LocalManager
+from silvabuilda.filesystem.remotes import RemoteManager
+from silvabuilda.filesystem.locals import LocalManager
 
 # Ensure paths are set correctly
 args = sys.argv[1:]

@@ -2,7 +2,7 @@ __author__="morven"
 __date__ ="$07-Jul-2011 23:40:00$"
 
 import os
-from filesystem import rm_existing,fix_path
+from silvabuilda.filesystem import rm_existing,fix_path
 
 class LocalManager:
     def __init__(self,path = None):

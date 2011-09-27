@@ -4,9 +4,9 @@ __date__ ="$07-Jul-2011 23:39:04$"
 import os
 import urllib
 
-from filesystem import rm_existing,fix_path
-from compressions.tar import TarArchive
-from compressions.zip import ZipArchive
+from silvabuilda.filesystem import rm_existing,fix_path
+from silvabuilda.compressions.tar import TarArchive
+from silvabuilda.compressions.zip import ZipArchive
 
 class RemoteManager:
     """
